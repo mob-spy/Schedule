@@ -1,22 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'
 import './App.css';
 import Menu from './component/Menu';
 import Content from './component/Content'
 import Add from './component/Add';
+import { connect } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
+
+class App extends Component {
+  showFormAdd = () => { 
+    if(this.props.isShowAdd){
+      return <Add /> ;
+    }
+  }
+  render() {
+    return (
+      <div className="App">
       <Menu />
       <div className="container">
         <div className="row">
           <Content />
-          <Add />
+          {this.showFormAdd()}
         </div>
       </div>
     </div>
-  );
+    )
+  }
 }
-
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    isShowAdd: state.isAdd
+  }
+}
+export default connect(mapStateToProps) (App);

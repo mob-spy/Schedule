@@ -1,29 +1,66 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import {dataNote} from '../firebaseConnect'
+import NoteItem from './NoteItem';
 
-export default class Content extends Component {
+class Content extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data:[]
+    }
+  }
+  UNSAFE_componentWillMount() {
+    dataNote.on('value', (notes) => {
+      var arr = [];
+      notes.forEach(item =>{
+        const key = item.key;
+        const title = item.val().title;
+        const value = item.val().value;
+       arr.push({
+         key:key,
+         title:title,
+         value:value
+       })
+      });
+      this.setState({
+        data:arr
+      });
+    })
+  }
+  
+  getData = () => { 
+    return(
+      this.state.data.map( (item,key) => {
+        return <NoteItem key={key} title ={item.title} content={item.value} number={item.key} />;
+      })
+    )
+  }
+  isShowAdd = () => { 
+    this.props.showFormAdd();
+  }
     render() {
+      this.getData()
         return (
             <div className="conten col">
-            <div className="add_button text-right mb-4">
-              <button type="button" name="" id="" className="btn btn-primary">Add schedule</button>
-            </div>
-           <div id="accordianId" role="tablist" aria-multiselectable="true">
-             <div className="card">
-               <div className="card-header" role="tab" id="section1HeaderId">
-                 <h5 className="mb-0">
-                   <a data-toggle="collapse" data-parent="#accordianId" href="#section1ContentId" aria-expanded="true" aria-controls="section1ContentId">
-                     Section 1
-                   </a>
-                 </h5>
-               </div>
-               <div id="section1ContentId" className="collapse in" role="tabpanel" aria-labelledby="section1HeaderId">
-                 <div className="card-body">
-                   Section 1 content
-                 </div>
-               </div>
-             </div>
-           </div>
+              <div className="add_button text-right mb-4">
+                <button onClick={ () => this.isShowAdd()} type="button" name="" id="" className="btn btn-primary">Add schedule</button>
+              </div>
+              {this.getData()}
           </div>
         )
     }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+  }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    showFormAdd: () => {
+      dispatch({type:"IS_SHOW_ADD"})
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps) (Content);
