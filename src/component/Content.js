@@ -30,14 +30,17 @@ class Content extends Component {
   }
   
   getData = () => { 
-    return(
-      this.state.data.map( (item,key) => {
-        return <NoteItem key={key} title ={item.title} content={item.value} number={item.key} />;
-      })
-    )
+    if(this.state.data){
+      return(
+        this.state.data.map( (item,key) => {
+          return <NoteItem key={key} note={item} title ={item.title} content={item.value} number={item.key} />;
+        })
+      ) 
+    }
   }
   isShowAdd = () => { 
     this.props.showFormAdd();
+    this.props.showTitle("add");
   }
     render() {
       this.getData()
@@ -59,7 +62,13 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     showFormAdd: () => {
-      dispatch({type:"IS_SHOW_ADD"})
+      dispatch({type:"CHANGE_EDIT_STATUS"})
+    },
+    showTitle:(act) =>{
+      dispatch({
+        type:"CHANGE_TITLE",
+        act
+      })
     }
   }
 }
