@@ -27,6 +27,7 @@ class Content extends Component {
         data:arr
       });
     })
+    this.getData()
   }
   
   getData = () => { 
@@ -38,12 +39,11 @@ class Content extends Component {
       ) 
     }
   }
-  isShowAdd = () => { 
-    this.props.showFormAdd();
+  isShowAdd = () => {
+    this.props.showForm();
     this.props.showTitle("add");
   }
     render() {
-      this.getData()
         return (
             <div className="conten col">
               <div className="add_button text-right mb-4">
@@ -61,8 +61,10 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    showFormAdd: () => {
-      dispatch({type:"CHANGE_EDIT_STATUS"})
+    showForm: (act) => {
+      dispatch({
+        type:"CHANGE_EDIT_STATUS"
+      })
     },
     showTitle:(act) =>{
       dispatch({

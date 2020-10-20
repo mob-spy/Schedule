@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 class App extends Component {
   showFormAdd = () => { 
-    if(this.props.isShowAdd){
+    if(this.props.isShow){
       return <Add /> ;
     }
   }
@@ -28,7 +28,7 @@ class App extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    isShowAdd: state.isAdd
+    isShow: state.showForm
   }
 }
 export default connect(mapStateToProps) (App);

@@ -2,7 +2,7 @@ import {dataNote} from "../firebaseConnect";
 
 var redux = require("redux");
 const noteInitialState = {
-    isAdd:false,
+    showForm:false,
     editItem:{},
     showTitle:""
 }
@@ -10,9 +10,10 @@ const noteReducer = (state = noteInitialState, action) => {
     switch (action.type) {
         case "ADD_DATA":
             dataNote.push(action.getItem)
-            return state
+            return {...state,editItem:{}}
         case "CHANGE_EDIT_STATUS":
-            return {...state,isAdd:!state.isAdd}
+            console.log(state.showForm);
+            return {...state,editItem:{},showForm:!state.showForm}
         case "CHANGE_TITLE":
             return {...state,showTitle:action.act}
         case "DELETE":
@@ -25,7 +26,7 @@ const noteReducer = (state = noteInitialState, action) => {
                 title:action.editItem.title,
                 value:action.editItem.value
             })
-            return {...state,editItem:{}}
+            return {...state,editItem:{},showForm:!state.showForm}
         default:
             return state
         }
